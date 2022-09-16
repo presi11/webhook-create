@@ -1,8 +1,12 @@
 name: 'Deploy release for this service'
 
 on:
-  repository_dispatch:
-    types: [test_result]
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+  # repository_dispatch:
+  #   types: [test_result]
 
 jobs:
 
