@@ -1,0 +1,33 @@
+name: 'Deploy release for this service'
+
+on:
+  repository_dispatch:
+    types: [on-demand-test]
+
+jobs:
+
+  pipeline:
+    name: Skaffold Docker build
+    runs-on: ubuntu-20.04
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    steps:
+    
+      - uses: actions/checkout@v3
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v0'
+        with:
+          credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
+      - id: 'get-credentials'
+        uses: 'google-github-actions/get-gke-credentials@v0'
+        with:
+          cluster_name: 'glt-cluster'
+          location: 'us-central1-c'
+        
+      - name: Build Docker images
+        uses: hiberbee/github-action-skaffold@1.22.0
+        with:
+           command: run 
+           tag: ${{ github.ref_name }}

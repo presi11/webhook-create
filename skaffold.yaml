@@ -1,0 +1,25 @@
+apiVersion: skaffold/v2beta29
+kind: Config
+metadata: 
+  name: neutrino-api
+build:
+  artifacts:
+    - image: neutrino-api
+      docker: 
+        dockerfile: docker/Dockerfile
+deploy:
+  kustomize:
+    paths:
+      - "k8s/overlays/dev"
+profiles:
+- name: prod
+  deploy:
+    kustomize:
+      paths:
+        - "k8s/overlays/prod"
+portForward:
+  - resourceType: deployment
+    resourceName: api
+    port: 80
+    localPort: 8900
+  
