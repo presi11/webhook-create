@@ -2,7 +2,7 @@ name: 'Deploy release for this service'
 
 on:
   repository_dispatch:
-    types: [on-demand-test]
+    types: [test_result]
 
 jobs:
 
